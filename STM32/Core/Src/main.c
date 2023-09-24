@@ -91,18 +91,43 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int count = 0;
+
+  #define RED 0
+  #define YELLOW 1
+  #define GREEN 2
+
+  int led_status = RED;
+  int count = 5;
 
   while (1)
   {
-	  if (count >= 200)
+	  if (count <= 0) //// switch to new status
 	  {
-		  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);
-		  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);
-		  count = 0;
+		  switch (led_status)
+		  {
+		  case RED:
+			  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);		// turn off red led
+			  HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);	// turn on green led
+			  count = 3;												// set counter = 3
+			  led_status = GREEN;
+			  break;
+
+		  case GREEN:
+			  HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);	// turn off green led
+			  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);	// turn on red led
+			  count = 2;												// set counter = 2
+			  led_status = YELLOW;
+			  break;
+
+		  case YELLOW:
+			  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);	// turn off yellow led
+			  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);		// turn on red led
+			  count = 5;												// set counter = 5
+			  led_status = RED;
+		  }
 	  }
-	  count++;
-	  HAL_Delay(10);
+	  count--;
+	  HAL_Delay(1000);
 
     /* USER CODE END WHILE */
 
@@ -161,9 +186,10 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, RED_LED_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(GPIOA, YELLOW_LED_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, GREEN_LED_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pins : RED_LED_Pin YELLOW_LED_Pin */
-  GPIO_InitStruct.Pin = RED_LED_Pin|YELLOW_LED_Pin;
+  /*Configure GPIO pins : RED_LED_Pin YELLOW_LED_Pin GREEN_LED_Pin */
+  GPIO_InitStruct.Pin = RED_LED_Pin|YELLOW_LED_Pin|GREEN_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
