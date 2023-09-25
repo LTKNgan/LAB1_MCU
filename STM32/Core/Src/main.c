@@ -47,6 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -83,14 +84,70 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  #define RED1_GREEN2 0
+  #define RED1_YELLOW2 1
+  #define GREEN1_RED2 2
+  #define YELLOW1_RED2 3
+  // 1 for top and bottom leds, 2 for 2-side leds
+
+  int led_status = RED1_GREEN2;
+  int count = 3;
+
   while (1)
   {
+	  if (count <= 0)
+	  {
+		  switch (led_status)
+		  {
+		  case RED1_GREEN2:
+	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);		// turn off green led 2
+	  		  HAL_GPIO_TogglePin(YELLOW_SIDE_GPIO_Port, YELLOW_SIDE_Pin);	// turn on yellow led 2
+	  		  // LED 1 STILL IN RED
+	  		  count = 2;													// set counter for yellow led 2
+	  		  led_status = RED1_YELLOW2;
+			  break;
+
+		  case RED1_YELLOW2:
+	  		  HAL_GPIO_TogglePin(YELLOW_SIDE_GPIO_Port, YELLOW_SIDE_Pin);	// turn off yellow led 2
+	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);			// turn on red led 2
+			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);			// turn off red led 1
+			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);		// turn on green led 1
+			  count = 3;													// set counter for green led 1
+			  led_status = GREEN1_RED2;
+			  break;
+
+		  case GREEN1_RED2:
+			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);		// turn off green led 1
+			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);		// turn on yellow led 1
+			  // LED 2 STILL IN RED
+			  count = 2;													// set counter for yellow led 1
+			  led_status = YELLOW1_RED2;
+			  break;
+
+		  case YELLOW1_RED2:
+			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);		// turn off yellow led 1
+			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);			// turn on green led 1
+	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);			// turn off red led 2
+	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);		// turn on green led 2
+	  		  count = 3;													// set counter for green led 2
+	  		  led_status = RED1_GREEN2;
+	  		  break;
+
+		  default:
+			  break;
+		  }
+	  }
+	  count--;
+	  HAL_Delay(1000);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -131,6 +188,34 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, RED_STR_Pin|GREEN_SIDE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, YELLOW_STR_Pin|GREEN_STR_Pin|RED_SIDE_Pin
+                            |YELLOW_SIDE_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pins : RED_STR_Pin YELLOW_STR_Pin GREEN_STR_Pin RED_SIDE_Pin
+                           YELLOW_SIDE_Pin GREEN_SIDE_Pin */
+  GPIO_InitStruct.Pin = RED_STR_Pin|YELLOW_STR_Pin|GREEN_STR_Pin|RED_SIDE_Pin
+                          |YELLOW_SIDE_Pin|GREEN_SIDE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
