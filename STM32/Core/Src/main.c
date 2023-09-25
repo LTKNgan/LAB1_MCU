@@ -106,23 +106,32 @@ int main(void)
 		  switch (led_status)
 		  {
 		  case RED:
-			  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);		// turn off red led
-			  HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);	// turn on green led
-			  count = 3;												// set counter = 3
+          // turn off red led
+			  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);		
+          // turn on green led
+			  HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);	
+          // set counter = 3
+			  count = 3;												
 			  led_status = GREEN;
 			  break;
 
 		  case GREEN:
-			  HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);	// turn off green led
-			  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);	// turn on red led
-			  count = 2;												// set counter = 2
+          // turn off green led
+			  HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);	
+          // turn on yellow led
+			  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);	
+          // set counter = 2
+			  count = 2;												
 			  led_status = YELLOW;
 			  break;
 
 		  case YELLOW:
-			  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);	// turn off yellow led
-			  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);		// turn on red led
-			  count = 5;												// set counter = 5
+          // turn off yellow led
+			  HAL_GPIO_TogglePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin);	
+          // turn on red led
+			  HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);	
+          // set counter = 5	
+			  count = 5;												
 			  led_status = RED;
 		  }
 	  }
