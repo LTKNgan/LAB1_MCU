@@ -102,7 +102,7 @@ int main(void)
   int led_status = RED1_GREEN2;
   int count = 3;
 
-  int count7sm = 0;
+  int light = 5;
 
   while (1)
   {
@@ -127,6 +127,7 @@ int main(void)
 			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);
 			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);
 			  count = 3;				// set counter for green led 1
+			  light = 3;
 			  led_status = GREEN1_RED2;
 			  break;
 
@@ -136,6 +137,7 @@ int main(void)
 			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);
 			  // LED 2 STILL IN RED
 			  count = 2;				// set counter for yellow led 1
+			  light = 2;
 			  led_status = YELLOW1_RED2;
 			  break;
 
@@ -147,6 +149,7 @@ int main(void)
 	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);
 	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);
 	  		  count = 3;				// set counter for green led 2
+	  		  light = 5;
 	  		  led_status = RED1_GREEN2;
 	  		  break;
 
@@ -155,10 +158,8 @@ int main(void)
 		  }
 	  }
 	  count--;
-
-	  // for testing 7-segment led
-	  if(count7sm >= 10) count7sm = 0;
-	  display7SEG(count7sm++);
+	  display7SEG(light);
+	  light--;
 
 	  HAL_Delay(1000);
 
