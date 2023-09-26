@@ -142,16 +142,17 @@ int main(void)
 		  switch (led_status)
 		  {
 		  case RED1_GREEN2:
-	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);		// turn off green led 2
+			  // turn off green led 2 and turn on yellow led 2
+	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);
  800018c:	f44f 6180 	mov.w	r1, #1024	; 0x400
  8000190:	482e      	ldr	r0, [pc, #184]	; (800024c <main+0x100>)
  8000192:	f000 fe2d 	bl	8000df0 <HAL_GPIO_TogglePin>
-	  		  HAL_GPIO_TogglePin(YELLOW_SIDE_GPIO_Port, YELLOW_SIDE_Pin);	// turn on yellow led 2
+	  		  HAL_GPIO_TogglePin(YELLOW_SIDE_GPIO_Port, YELLOW_SIDE_Pin);
  8000196:	f44f 7100 	mov.w	r1, #512	; 0x200
  800019a:	482c      	ldr	r0, [pc, #176]	; (800024c <main+0x100>)
  800019c:	f000 fe28 	bl	8000df0 <HAL_GPIO_TogglePin>
 	  		  // LED 1 STILL IN RED
-	  		  count = 2;													// set counter for yellow led 2
+	  		  count = 2;				// set counter for yellow led 2
  80001a0:	2302      	movs	r3, #2
  80001a2:	60bb      	str	r3, [r7, #8]
 	  		  led_status = RED1_YELLOW2;
@@ -161,23 +162,25 @@ int main(void)
  80001a8:	e03d      	b.n	8000226 <main+0xda>
 
 		  case RED1_YELLOW2:
-	  		  HAL_GPIO_TogglePin(YELLOW_SIDE_GPIO_Port, YELLOW_SIDE_Pin);	// turn off yellow led 2
+			  // turn off yellow led 2 and turn on red led 2
+	  		  HAL_GPIO_TogglePin(YELLOW_SIDE_GPIO_Port, YELLOW_SIDE_Pin);
  80001aa:	f44f 7100 	mov.w	r1, #512	; 0x200
  80001ae:	4827      	ldr	r0, [pc, #156]	; (800024c <main+0x100>)
  80001b0:	f000 fe1e 	bl	8000df0 <HAL_GPIO_TogglePin>
-	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);			// turn on red led 2
+	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);
  80001b4:	f44f 7180 	mov.w	r1, #256	; 0x100
  80001b8:	4824      	ldr	r0, [pc, #144]	; (800024c <main+0x100>)
  80001ba:	f000 fe19 	bl	8000df0 <HAL_GPIO_TogglePin>
-			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);			// turn off red led 1
+	  		  // turn off red led 1 and turn on green led 1
+			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);
  80001be:	2108      	movs	r1, #8
  80001c0:	4822      	ldr	r0, [pc, #136]	; (800024c <main+0x100>)
  80001c2:	f000 fe15 	bl	8000df0 <HAL_GPIO_TogglePin>
-			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);		// turn on green led 1
+			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);
  80001c6:	2120      	movs	r1, #32
  80001c8:	4820      	ldr	r0, [pc, #128]	; (800024c <main+0x100>)
  80001ca:	f000 fe11 	bl	8000df0 <HAL_GPIO_TogglePin>
-			  count = 3;													// set counter for green led 1
+			  count = 3;				// set counter for green led 1
  80001ce:	2303      	movs	r3, #3
  80001d0:	60bb      	str	r3, [r7, #8]
 			  led_status = GREEN1_RED2;
@@ -187,16 +190,17 @@ int main(void)
  80001d6:	e026      	b.n	8000226 <main+0xda>
 
 		  case GREEN1_RED2:
-			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);		// turn off green led 1
+			  //turn off green led 1 and turn on yellow led 1
+			  HAL_GPIO_TogglePin(GREEN_STR_GPIO_Port, GREEN_STR_Pin);
  80001d8:	2120      	movs	r1, #32
  80001da:	481c      	ldr	r0, [pc, #112]	; (800024c <main+0x100>)
  80001dc:	f000 fe08 	bl	8000df0 <HAL_GPIO_TogglePin>
-			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);		// turn on yellow led 1
+			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);
  80001e0:	2110      	movs	r1, #16
  80001e2:	481a      	ldr	r0, [pc, #104]	; (800024c <main+0x100>)
  80001e4:	f000 fe04 	bl	8000df0 <HAL_GPIO_TogglePin>
 			  // LED 2 STILL IN RED
-			  count = 2;													// set counter for yellow led 1
+			  count = 2;				// set counter for yellow led 1
  80001e8:	2302      	movs	r3, #2
  80001ea:	60bb      	str	r3, [r7, #8]
 			  led_status = YELLOW1_RED2;
@@ -206,23 +210,25 @@ int main(void)
  80001f0:	e019      	b.n	8000226 <main+0xda>
 
 		  case YELLOW1_RED2:
-			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);		// turn off yellow led 1
+			  // turn off yellow led 1 and turn on green led 1
+			  HAL_GPIO_TogglePin(YELLOW_STR_GPIO_Port, YELLOW_STR_Pin);
  80001f2:	2110      	movs	r1, #16
  80001f4:	4815      	ldr	r0, [pc, #84]	; (800024c <main+0x100>)
  80001f6:	f000 fdfb 	bl	8000df0 <HAL_GPIO_TogglePin>
-			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);			// turn on green led 1
+			  HAL_GPIO_TogglePin(RED_STR_GPIO_Port, RED_STR_Pin);
  80001fa:	2108      	movs	r1, #8
  80001fc:	4813      	ldr	r0, [pc, #76]	; (800024c <main+0x100>)
  80001fe:	f000 fdf7 	bl	8000df0 <HAL_GPIO_TogglePin>
-	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);			// turn off red led 2
+			  // turn off red led 2 and turn on green led 2
+	  		  HAL_GPIO_TogglePin(RED_SIDE_GPIO_Port, RED_SIDE_Pin);
  8000202:	f44f 7180 	mov.w	r1, #256	; 0x100
  8000206:	4811      	ldr	r0, [pc, #68]	; (800024c <main+0x100>)
  8000208:	f000 fdf2 	bl	8000df0 <HAL_GPIO_TogglePin>
-	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);		// turn on green led 2
+	  		  HAL_GPIO_TogglePin(GREEN_SIDE_GPIO_Port, GREEN_SIDE_Pin);
  800020c:	f44f 6180 	mov.w	r1, #1024	; 0x400
  8000210:	480e      	ldr	r0, [pc, #56]	; (800024c <main+0x100>)
  8000212:	f000 fded 	bl	8000df0 <HAL_GPIO_TogglePin>
-	  		  count = 3;													// set counter for green led 2
+	  		  count = 3;				// set counter for green led 2
  8000216:	2303      	movs	r3, #3
  8000218:	60bb      	str	r3, [r7, #8]
 	  		  led_status = RED1_GREEN2;
