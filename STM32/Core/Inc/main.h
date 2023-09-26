@@ -58,6 +58,30 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define clk1_Pin GPIO_PIN_4
+#define clk1_GPIO_Port GPIOA
+#define clk2_Pin GPIO_PIN_5
+#define clk2_GPIO_Port GPIOA
+#define clk3_Pin GPIO_PIN_6
+#define clk3_GPIO_Port GPIOA
+#define clk4_Pin GPIO_PIN_7
+#define clk4_GPIO_Port GPIOA
+#define clk5_Pin GPIO_PIN_8
+#define clk5_GPIO_Port GPIOA
+#define clk6_Pin GPIO_PIN_9
+#define clk6_GPIO_Port GPIOA
+#define clk7_Pin GPIO_PIN_10
+#define clk7_GPIO_Port GPIOA
+#define clk8_Pin GPIO_PIN_11
+#define clk8_GPIO_Port GPIOA
+#define clk9_Pin GPIO_PIN_12
+#define clk9_GPIO_Port GPIOA
+#define clk10_Pin GPIO_PIN_13
+#define clk10_GPIO_Port GPIOA
+#define clk11_Pin GPIO_PIN_14
+#define clk11_GPIO_Port GPIOA
+#define clk0_Pin GPIO_PIN_15
+#define clk0_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

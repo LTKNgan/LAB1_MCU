@@ -47,13 +47,16 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void clearAllClock();
+void setNumberOnClock(int);
+void clearNumberOnClock(int);
 /* USER CODE END 0 */
 
 /**
@@ -83,14 +86,53 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  // initialize second, minute and hour parameter
+  int sec = 5, min = 4, hour = 3;
+  setNumberOnClock(sec/5);
+  setNumberOnClock(min/5);
+  setNumberOnClock(hour);
+
   while (1)
   {
+	 if (sec >= 60)
+	 {
+		 sec = 0;			// reset second
+		 // clear old state of sec if it does not present min or hour
+		 if (min/5 != 11 && hour != 11) clearNumberOnClock(11);
+
+		 // clear old state of min if it does not present sec or hour before increase
+		 if (min/5 != sec/5 && min/5 != hour) clearNumberOnClock(min/5);
+
+		 // update min
+		 min++;
+		 if (min >= 60)
+		 {
+			 min = 0;
+			 // clear old state of hour if it does not present sec or min before increase
+			 if (hour != sec/5 && hour != min/5) clearNumberOnClock(hour);
+			 hour++;
+			 if (hour >= 12) hour = 0;
+			 setNumberOnClock(hour);
+		 }
+		 setNumberOnClock(min/5);
+	 }
+	 else
+	 {
+		 // clear old state of sec if it does not present min or hour
+		 if (sec/5 - 1 != min/5 && sec/5 - 1 != hour) clearNumberOnClock(sec/5 - 1);
+	 }
+	 setNumberOnClock(sec/5);
+	 sec++;
+	 HAL_Delay(1000);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -133,7 +175,170 @@ void SystemClock_Config(void)
   }
 }
 
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, clk1_Pin|clk2_Pin|clk3_Pin|clk4_Pin
+                          |clk5_Pin|clk6_Pin|clk7_Pin|clk8_Pin
+                          |clk9_Pin|clk10_Pin|clk11_Pin|clk0_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pins : clk1_Pin clk2_Pin clk3_Pin clk4_Pin
+                           clk5_Pin clk6_Pin clk7_Pin clk8_Pin
+                           clk9_Pin clk10_Pin clk11_Pin clk0_Pin */
+  GPIO_InitStruct.Pin = clk1_Pin|clk2_Pin|clk3_Pin|clk4_Pin
+                          |clk5_Pin|clk6_Pin|clk7_Pin|clk8_Pin
+                          |clk9_Pin|clk10_Pin|clk11_Pin|clk0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+}
+
 /* USER CODE BEGIN 4 */
+
+void clearAllClock()
+{
+	HAL_GPIO_WritePin(clk0_GPIO_Port, clk0_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk1_GPIO_Port, clk1_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk2_GPIO_Port, clk2_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk3_GPIO_Port, clk3_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk4_GPIO_Port, clk4_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk5_GPIO_Port, clk5_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk6_GPIO_Port, clk6_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk7_GPIO_Port, clk7_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk8_GPIO_Port, clk8_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk9_GPIO_Port, clk9_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk10_GPIO_Port, clk10_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(clk11_GPIO_Port, clk11_Pin, GPIO_PIN_SET);
+}
+
+
+
+void setNumberOnClock(int num)
+{
+	switch (num)
+	{
+	case 0:
+		HAL_GPIO_WritePin(clk0_GPIO_Port, clk0_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 1:
+		HAL_GPIO_WritePin(clk1_GPIO_Port, clk1_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 2:
+		HAL_GPIO_WritePin(clk2_GPIO_Port, clk2_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 3:
+		HAL_GPIO_WritePin(clk3_GPIO_Port, clk3_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 4:
+		HAL_GPIO_WritePin(clk4_GPIO_Port, clk4_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 5:
+		HAL_GPIO_WritePin(clk5_GPIO_Port, clk5_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 6:
+		HAL_GPIO_WritePin(clk6_GPIO_Port, clk6_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 7:
+		HAL_GPIO_WritePin(clk7_GPIO_Port, clk7_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 8:
+		HAL_GPIO_WritePin(clk8_GPIO_Port, clk8_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 9:
+		HAL_GPIO_WritePin(clk9_GPIO_Port, clk9_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 10:
+		HAL_GPIO_WritePin(clk10_GPIO_Port, clk10_Pin, GPIO_PIN_RESET);
+		break;
+
+	case 11:
+		HAL_GPIO_WritePin(clk11_GPIO_Port, clk11_Pin, GPIO_PIN_RESET);
+		break;
+
+	default:
+		break;
+	}
+}
+
+
+void clearNumberOnClock(int num)
+{
+	switch (num)
+	{
+	case 0:
+		HAL_GPIO_WritePin(clk0_GPIO_Port, clk0_Pin, GPIO_PIN_SET);
+		break;
+
+	case 1:
+		HAL_GPIO_WritePin(clk1_GPIO_Port, clk1_Pin, GPIO_PIN_SET);
+		break;
+
+	case 2:
+		HAL_GPIO_WritePin(clk2_GPIO_Port, clk2_Pin, GPIO_PIN_SET);
+		break;
+
+	case 3:
+		HAL_GPIO_WritePin(clk3_GPIO_Port, clk3_Pin, GPIO_PIN_SET);
+		break;
+
+	case 4:
+		HAL_GPIO_WritePin(clk4_GPIO_Port, clk4_Pin, GPIO_PIN_SET);
+		break;
+
+	case 5:
+		HAL_GPIO_WritePin(clk5_GPIO_Port, clk5_Pin, GPIO_PIN_SET);
+		break;
+
+	case 6:
+		HAL_GPIO_WritePin(clk6_GPIO_Port, clk6_Pin, GPIO_PIN_SET);
+		break;
+
+	case 7:
+		HAL_GPIO_WritePin(clk7_GPIO_Port, clk7_Pin, GPIO_PIN_SET);
+		break;
+
+	case 8:
+		HAL_GPIO_WritePin(clk8_GPIO_Port, clk8_Pin, GPIO_PIN_SET);
+		break;
+
+	case 9:
+		HAL_GPIO_WritePin(clk9_GPIO_Port, clk9_Pin, GPIO_PIN_SET);
+		break;
+
+	case 10:
+		HAL_GPIO_WritePin(clk10_GPIO_Port, clk10_Pin, GPIO_PIN_SET);
+		break;
+
+	case 11:
+		HAL_GPIO_WritePin(clk11_GPIO_Port, clk11_Pin, GPIO_PIN_SET);
+		break;
+
+	default:
+		break;
+	}
+}
 
 /* USER CODE END 4 */
 
