@@ -95,65 +95,43 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   // initialize second, minute and hour parameter
-  int num = 0;
+  int sec = 5, min = 4, hour = 3;
+  setNumberOnClock(sec/5);
+  setNumberOnClock(min/5);
+  setNumberOnClock(hour);
 
   while (1)
   {
-	 switch (num)
+	 if (sec >= 60)
 	 {
-	 case 0:
-		 HAL_GPIO_TogglePin(clk0_GPIO_Port, clk0_Pin);
-		 break;
+		 sec = 0;			// reset second
+		 // clear old state of sec if it does not present min or hour
+		 if (min/5 != 11 && hour != 11) clearNumberOnClock(11);
 
-	 case 1:
-		 HAL_GPIO_TogglePin(clk1_GPIO_Port, clk1_Pin);
-		 break;
-	 case 2:
-		 HAL_GPIO_TogglePin(clk2_GPIO_Port, clk2_Pin);
-		 break;
+		 // clear old state of min if it does not present sec or hour before increase
+		 if (min/5 != sec/5 && min/5 != hour) clearNumberOnClock(min/5);
 
-	 case 3:
-		 HAL_GPIO_TogglePin(clk3_GPIO_Port, clk3_Pin);
-		 break;
-
-	 case 4:
-		 HAL_GPIO_TogglePin(clk4_GPIO_Port, clk4_Pin);
-		 break;
-
-	 case 5:
-		 HAL_GPIO_TogglePin(clk5_GPIO_Port, clk5_Pin);
-		 break;
-
-	 case 6:
-		 HAL_GPIO_TogglePin(clk6_GPIO_Port, clk6_Pin);
-		 break;
-
-	 case 7:
-		 HAL_GPIO_TogglePin(clk7_GPIO_Port, clk7_Pin);
-		 break;
-
-	 case 8:
-		 HAL_GPIO_TogglePin(clk8_GPIO_Port, clk8_Pin);
-		 break;
-
-	 case 9:
-		 HAL_GPIO_TogglePin(clk9_GPIO_Port, clk9_Pin);
-		 break;
-
-	 case 10:
-		 HAL_GPIO_TogglePin(clk10_GPIO_Port, clk10_Pin);
-		 break;
-
-	 case 11:
-		 HAL_GPIO_TogglePin(clk11_GPIO_Port, clk11_Pin);
-		 break;
-
-	 default:
-		 break;
+		 // update min
+		 min++;
+		 if (min >= 60)
+		 {
+			 min = 0;
+			 // clear old state of hour if it does not present sec or min before increase
+			 if (hour != sec/5 && hour != min/5) clearNumberOnClock(hour);
+			 hour++;
+			 if (hour >= 12) hour = 0;
+			 setNumberOnClock(hour);
+		 }
+		 setNumberOnClock(min/5);
 	 }
-	 num++;
-	 if  (num >= 12) num = 0;
-	 HAL_Delay(100);
+	 else
+	 {
+		 // clear old state of sec if it does not present min or hour
+		 if (sec/5 - 1 != min/5 && sec/5 - 1 != hour) clearNumberOnClock(sec/5 - 1);
+	 }
+	 setNumberOnClock(sec/5);
+	 sec++;
+	 HAL_Delay(1000);
 
     /* USER CODE END WHILE */
 
